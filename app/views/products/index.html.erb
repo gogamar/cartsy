@@ -1,0 +1,24 @@
+<h1>Products</h1>
+<% @products.each do |product| %>
+  <div>
+    <h2><%= product.name %></h2>
+    <p>Price: <%= number_to_currency(product.price) %></p>
+    <%= form_with(url: add_to_cart_product_path(product), method: :post) do %>
+      <%= hidden_field_tag 'product_id', product.id %>
+      <%= label_tag "quantity", "Quantity" %>
+      <%= number_field_tag "quantity", 1, min: 1 %>
+      <%= submit_tag "Add to Cart" %>
+    <% end %>
+  </div>
+<% end %>
+<h2>Your Cart</h2>
+<ul>
+  <% @cart_service.cart_items.each do |product_id, quantity| %>
+    <% product = @products.find { |p| p.id == product_id.to_i } %>
+    <li><%= product.name %>: <%= quantity %></li>
+  <% end %>
+</ul>
+<p>
+  Total Price: <%= number_to_currency(@cart_service.total_price(@products)) %>
+</p>
+<%= button_to "Checkout", checkout_path, method: :post %>
