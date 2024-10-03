@@ -1,3 +1,31 @@
-<h1>Order Confirmation</h1>
-<p>Order Status: <%= @order.status %></p>
-<p>Total Price: <%= number_to_currency(@order.total_price) %></p>
+<div class="order-confirmation">
+  <h1 class="order-title">
+    <%= @order.status == 'Pending' ? 'Please review your order' : 'Thank you for your order' %>
+  </h1>
+  <p class="order-status <%= 'confirmed' if @order.status == 'Confirmed' %>">Order Status: <%= @order.status %></p>
+  <div class="order-items">
+    <% @order.order_items.each do |item| %>
+      <% product = Product.find(item.product_id) %>
+      <div class="order-item">
+        <div class="order-item-details">
+          <span class="product-name"><%= product.name %></span>
+          <span class="price-per-item"><%= number_to_currency(item.price_per_item) %></span>
+          <span class="quantity">Quantity: <%= item.quantity %></span>
+          <span class="total-price"><%= number_to_currency(item.total_price) %></span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <p class="order-total">Total Price: <%= number_to_currency(@order.total_price) %></p>
+  <div class="order-actions">
+    <%= link_to "#{@order.status == 'Confirmed' ? 'Shop Again' : 'Back to Products'}", products_path, class: "btn back-btn" %>
+    <% unless @order.status == 'Confirmed' %>
+      <%= form_with(model: @order, local: true, class: "order-confirmation-form") do |form| %>
+        <%= form.hidden_field :status, value: 'Confirmed' %>
+        <div class="form-actions">
+          <%= form.button "Confirm Order", type: "submit", class: "btn confirm-btn" %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

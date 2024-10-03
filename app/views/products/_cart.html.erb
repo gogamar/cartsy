@@ -1,0 +1,49 @@
+<div class="cart-summary">
+  <%= turbo_frame_tag "cart_frame" do %>
+    <ul class="cart-items">
+      <% cart.cart_items.each do |product_id, quantity| %>
+        <% product = products.find { |p| p.id == product_id.to_i } %>
+        <% if product %>
+          <li class="cart-item">
+            <span class="item-name"><%= product.name %></span>
+            <span class="item-quantity">x <%= quantity %></span>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+    <p class="cart-total">
+      <strong>Total Price:</strong> <%= number_to_currency(cart.total_price(products)) %>
+    </p>
+  <% end %>
+  <% if cart.cart_items.any? %>
+    <div id="checkout-container">
+      <div>
+        <%= button_to "Checkout", checkout_path, method: :post, class: "checkout-btn" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const checkoutContainer = document.getElementById("checkout-container");
+
+    function updateCheckoutVisibility() {
+      const cartItems = document.querySelectorAll(".cart-item");
+      if (cartItems.length === 0) {
+        checkoutContainer.style.display = "none";
+      } else {
+        checkoutContainer.style.display = "block";
+      }
+    }
+
+    // Initially check visibility on page load
+    updateCheckoutVisibility();
+
+    // Event listener for incrementing/decrementing items in the cart
+    document.querySelectorAll('.add-to-cart-form').forEach(form => {
+      form.addEventListener("submit", function() {
+        updateCheckoutVisibility();
+      });
+    });
+  });
+</script>
