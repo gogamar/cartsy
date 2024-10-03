@@ -1,26 +1,30 @@
 class ProductsController < ApplicationController
   def index
     @products = Product.all
-    @cart_service = CartService.new(session)
   end
 
   def add_to_cart
-    @cart_service = CartService.new(session)
-    product_id = params[:product_id]  # Retrieve product_id from the hidden field
-    quantity = params[:quantity]        # Retrieve the quantity
+    @products = Product.all
+    product_id = params[:product_id]
+    quantity = params[:quantity]
 
-    @cart_service.add_product(product_id, quantity)
-    redirect_to products_path
+    @cart.add_product(product_id, quantity)
+
+    respond_to do |format|
+      format.html { redirect_to products_path, notice: 'Product added to cart.' }
+      format.js { render partial: 'products/cart', locals: { cart: @cart, products: @products } }
+    end
   end
 
   def checkout
-    @cart_service = CartService.new(session)
-    @products = Product.all
-    total_price = @cart_service.total_price(@products)
-
-    @order = Order.create(status: 'Confirmed', total_price: total_price)
-    @cart_service.clear_cart
-
-    redirect_to order_path(@order)
+    @order = Order.create(status: 'Pending')
+    @order.add_items(@cart)
+    @order.total_price = @order.calculate_total_price
+    @order.save
+    if @order.save
+      redirect_to order_path(@order)
+    else
+      redirect_to products_path, alert: 'Failed to create order.'
+    end
   end
 end
