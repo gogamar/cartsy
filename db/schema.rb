@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_02_204409) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_03_101818) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_204409) do
     t.bigint "order_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "price_with_discount", precision: 10, scale: 2
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
   end
@@ -38,11 +39,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_204409) do
   create_table "pricing_rules", force: :cascade do |t|
     t.string "rule_type"
     t.integer "min_quantity"
-    t.decimal "discount_price", precision: 10, scale: 2
+    t.decimal "discount_amount", precision: 10, scale: 2
     t.decimal "discount_percentage", precision: 5, scale: 2
     t.integer "free_items"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
   end
 
   create_table "pricing_rules_products", id: false, force: :cascade do |t|
