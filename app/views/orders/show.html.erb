@@ -1,6 +1,4 @@
 <div class="order-confirmation">
-  <%= @order.total_discount %>
-  <%= @order.order_items.inspect %>
   <h1 class="order-title">
     <%= @order.status == 'Pending' ? 'Please review your order' : 'Thank you for your order' %>
   </h1>
