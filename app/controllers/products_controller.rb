@@ -20,6 +20,7 @@ class ProductsController < ApplicationController
     @order = Order.create(status: 'Pending')
     @order.add_items(@cart)
     @order.total_price = @order.calculate_total_price
+    @order.total_discount = @order.calculate_total_discount
     @order.save
     if @order.save
       redirect_to order_path(@order)

@@ -1,4 +1,6 @@
 <div class="order-confirmation">
+  <%= @order.total_discount %>
+  <%= @order.order_items.inspect %>
   <h1 class="order-title">
     <%= @order.status == 'Pending' ? 'Please review your order' : 'Thank you for your order' %>
   </h1>
@@ -17,6 +19,7 @@
       </div>
     <% end %>
   </div>
+  <p class="alert alert-success order-status">You have just saved <%= number_to_currency(@order.total_discount) %></p>
   <p class="order-total">Total Price: <%= number_to_currency(@order.total_price) %></p>
   <div class="order-actions">
     <%= link_to "#{@order.status == 'Confirmed' ? 'Shop Again' : 'Back to Products'}", products_path, class: "btn back-btn" %>
