@@ -20,6 +20,7 @@ class CartService
 
   def calculate_discount(product, quantity)
     price_per_item = product.price
+    discount_amount = 0
     price_with_discount = nil
     discount_description = ""
     total_price = price_per_item * quantity
@@ -28,13 +29,15 @@ class CartService
       discount_data = best_discount_data(product, quantity)
       best_rule = discount_data[:best_rule]
       best_discount = discount_data[:best_discount]
+      best_price = discount_data[:best_price]
 
       if best_rule
         discount_description = best_rule.description
+        discount_amount = best_discount
         if best_rule.free_items.present?
           recalculate_free_items(quantity, best_rule.min_quantity, best_rule.free_items, product.id)
         else
-          price_with_discount = price_per_item - best_discount
+          price_with_discount = best_price
           total_price = price_with_discount * quantity
         end
       end
@@ -42,6 +45,7 @@ class CartService
 
     {
       price_per_item: price_per_item,
+      discount_amount: discount_amount,
       price_with_discount: price_with_discount,
       quantity: quantity,
       total_price: total_price,
@@ -51,6 +55,10 @@ class CartService
 
   def cart_total_price
     @cart_items.values.sum { |item| item[:total_price].to_f }
+  end
+
+  def cart_total_discount
+    @cart_items.values.sum { |item| item[:discount_amount].to_f }
   end
 
   def cart_items
@@ -65,29 +73,31 @@ class CartService
   private
 
   def best_discount_data(product, quantity)
-    best_discount = 0
     best_rule = nil
+    best_discount = 0
+    best_price = nil
 
     product.pricing_rules.each do |rule|
       if rule.min_quantity.present? && quantity >= rule.min_quantity
         discount_amount = calculate_discount_amount(product.price, rule, quantity)
         if discount_amount > best_discount
-          best_discount = discount_amount
           best_rule = rule
+          best_discount = discount_amount
+          best_price = product.price - (discount_amount / quantity)
         end
       end
     end
 
-    { best_rule: best_rule, best_discount: best_discount }
+    { best_rule: best_rule, best_discount: best_discount, best_price: best_price }
   end
 
   def calculate_discount_amount(price_per_item, rule, quantity)
     if rule.discount_amount.present?
-      rule.discount_amount
+      rule.discount_amount * quantity
     elsif rule.discount_percentage.present?
-      price_per_item * (rule.discount_percentage / 100)
+      price_per_item * (rule.discount_percentage / 100) * quantity
     elsif rule.free_items.present?
-      price_per_item * (rule.free_items.to_f / (rule.min_quantity + rule.free_items))
+      price_per_item * rule.free_items * quantity
     else
       0
     end

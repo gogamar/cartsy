@@ -117,6 +117,19 @@ RSpec.describe CartService do
     end
   end
 
+  describe '#cart_total_discount' do
+    let(:product1) { create(:product, price: 10) }
+    let(:product2) { create(:product, price: 15) }
+
+    it 'calculates total discount of all items in cart' do
+      service.add_product(product1.id, 1)
+      service.add_product(product2.id, 2)             # Debug output
+
+      expected_total = service.cart_items.values.sum { |item| item[:total_discount].to_f }
+      expect(service.cart_total_discount).to eq(expected_total)
+    end
+  end
+
   describe '#clear' do
     it 'removes all items from the cart' do
       service.add_product(create(:product).id, 2)

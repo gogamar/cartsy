@@ -1,4 +1,5 @@
 <div class="cart-summary">
+  <%= session[:cart] %>
   <%= turbo_frame_tag "cart_frame" do %>
     <% if cart.cart_items.any? %>
       <ul class="cart-items">
