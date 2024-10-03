@@ -1,19 +1,35 @@
 <div class="cart-summary">
   <%= turbo_frame_tag "cart_frame" do %>
-    <ul class="cart-items">
-      <% cart.cart_items.each do |product_id, quantity| %>
-        <% product = products.find { |p| p.id == product_id.to_i } %>
-        <% if product %>
-          <li class="cart-item">
-            <span class="item-name"><%= product.name %></span>
-            <span class="item-quantity">x <%= quantity %></span>
-          </li>
+    <% if cart.cart_items.any? %>
+      <ul class="cart-items">
+        <% cart.cart_items.each do |product_id, item_data| %>
+          <% product = Product.find_by(id: product_id) %>
+          <% if product %>
+            <li class="cart-item">
+              <span class="item-name"><%= product.name %></span>
+              <span class="item-price <%= "strikethrough" if item_data[:price_with_discount] %>"><%= number_to_currency(item_data[:price_per_item].to_f) %></span>
+              <span class="item-price green">
+                <% if item_data[:price_with_discount] %>
+                  <%= number_to_currency(item_data[:price_with_discount].to_f) %>
+                <% end %>
+              </span>
+              <span class="item-quantity">x <%= item_data[:quantity] %></span>
+              <span class="item-total-price"><%= number_to_currency(item_data[:total_price].to_f) %></span>
+            </li>
+            <% if item_data[:discount_description] %>
+              <span class="item-description"><%= item_data[:discount_description] %></span>
+            <% end %>
+          <% end %>
         <% end %>
-      <% end %>
-    </ul>
-    <p class="cart-total">
-      <strong>Total Price:</strong> <%= number_to_currency(cart.total_price(products)) %>
-    </p>
+      </ul>
+      <p class="cart-total">
+        <strong>Total Price:</strong> <%= number_to_currency(cart.cart_total_price) %>
+      </p>
+    <% else %>
+      <p class="alert alert-info">
+        <strong>Your cart is empty.</strong>
+      </p>
+    <% end %>
   <% end %>
   <% if cart.cart_items.any? %>
     <div id="checkout-container">

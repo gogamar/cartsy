@@ -11,7 +11,7 @@ class ProductsController < ApplicationController
     @cart.add_product(product_id, quantity)
 
     respond_to do |format|
-      format.html { redirect_to products_path, notice: 'Product added to cart.' }
+      format.html { redirect_to products_path }
       format.js { render partial: 'products/cart', locals: { cart: @cart, products: @products } }
     end
   end

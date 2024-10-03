@@ -1,3 +1,4 @@
+Order.destroy_all
 Product.destroy_all
 PricingRule.destroy_all
 
@@ -12,9 +13,9 @@ products.each do |product_data|
 end
 
 pricing_rules = [
-  { rule_type: 'buy_one_get_one_free', min_quantity: 1, discount_price: nil, discount_percentage: nil, free_items: 1 },
-  { rule_type: 'bulk_discount_10_percent', min_quantity: 3, discount_price: nil, discount_percentage: 10.00, free_items: nil },
-  { rule_type: 'bulk_discount_33_percent', min_quantity: 3, discount_price: nil, discount_percentage: 33.33, free_items: nil }
+  { rule_type: 'buy_one_get_one_free', min_quantity: 1, discount_amount: nil, discount_percentage: nil, free_items: 1, description: 'Buy one get one free' },
+  { rule_type: 'bulk_discount_10_percent', min_quantity: 3, discount_amount: nil, discount_percentage: 10.00, free_items: nil, description: 'Save 10% when you buy 3 or more' },
+  { rule_type: 'bulk_discount_33_percent', min_quantity: 3, discount_amount: nil, discount_percentage: 33.33, free_items: nil, description: 'Save 1/3 of the price when you buy 3 or more' }
 ]
 
 pricing_rules.each do |rule_data|

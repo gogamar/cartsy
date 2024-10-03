@@ -9,7 +9,8 @@
       <div class="order-item">
         <div class="order-item-details">
           <span class="product-name"><%= product.name %></span>
-          <span class="price-per-item"><%= number_to_currency(item.price_per_item) %></span>
+          <span class="price-per-item <%= "strikethrough" if item.price_with_discount %>"><%= number_to_currency(item.price_per_item) %></span>
+          <span class="price-per-item <%= "green" if item.price_with_discount %>"><%= number_to_currency(item.price_with_discount) %></span>
           <span class="quantity">Quantity: <%= item.quantity %></span>
           <span class="total-price"><%= number_to_currency(item.total_price) %></span>
         </div>

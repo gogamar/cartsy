@@ -21,26 +21,22 @@ body {
 .container {
   display: flex;
   gap: 20px;
-  /* Optional: Add space between the two sides */
   padding: 20px;
+}
+
+.left-content, .right-content {
+  flex: 2;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 .left-content {
-  flex: 3;
-  /* 3 parts of the available space */
   background-color: #f4f4f4;
-  padding: 20px;
-  border-radius: 8px;
 }
 
 .right-content {
-  flex: 1;
-  /* 1 part of the available space */
   background-color: #e8e8e8;
-  padding: 20px;
-  border-radius: 8px;
 }
-
 
 .page-title {
   text-align: center;
@@ -93,7 +89,7 @@ body {
   margin-bottom: 15px;
 }
 
-.quantity-control button {
+.quantity-control button, .quantity-btn {
   background-color: #3498db;
   color: white;
   border: none;
@@ -103,11 +99,11 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.quantity-control button:hover {
+.quantity-control button:hover, .quantity-btn:hover {
   background-color: #2980b9;
 }
 
-.quantity-control input[type="number"] {
+.quantity-control input[type="number"], .quantity-input {
   width: 20px;
   text-align: center;
   font-size: 16px;
@@ -115,29 +111,6 @@ body {
   padding: 5px;
   border: 1px solid #ddd;
   border-radius: 4px;
-}
-
-.quantity-btn {
-  width: 30px;
-  padding: 5px 10px;
-  border: 1px solid #007b5e;
-  background-color: #007b5e;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.quantity-btn:hover {
-  background-color: #00573f;
-}
-
-.quantity-input {
-  width: 20px;
-  text-align: center;
-  font-size: 1rem;
-  padding: 5px;
 }
 
 .cart-summary {
@@ -156,13 +129,25 @@ body {
 .cart-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
+  padding-top: 25px;
   border-bottom: 1px solid #eee;
+}
+
+.cart-item span {
+  flex: 1;
+  text-align: center;
+}
+
+.cart-item span.item-name {
+  text-align: left;
+}
+
+.cart-item span.item-quantity, .cart-item span.item-total-price {
+  text-align: right;
 }
 
 .cart-item:last-child {
   border-bottom: none;
-  /* Remove border from the last item */
 }
 
 .item-name {
@@ -170,14 +155,19 @@ body {
   color: #333;
 }
 
-.item-quantity {
+.item-quantity, .item-description {
   font-weight: 400;
   color: #777;
+}
+
+.item-description {
+  font-style: italic;
 }
 
 .cart-total {
   font-size: 1.2rem;
   color: #007b5e;
+  float: right;
   margin-bottom: 20px;
 }
 
@@ -247,12 +237,9 @@ body {
 
 .order-item-details {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  /* 4 equal columns */
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
-  /* Space between columns */
   padding: 16px;
-  /* Padding inside the container */
 }
 
 .price-per-item, .quantity, .total-price {
@@ -316,6 +303,65 @@ body {
 
 .cart-summary .checkout-btn:hover {
   background-color: #218838;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.green {
+  color: green;
+}
+
+.promotion-description {
+  font-size: 0.8em;
+  color: #FFA500;
+  background-color: #FFF8E1;
+  padding: 8px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.alert-error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.alert-warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+
+.alert-info {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+
+.alert strong {
+  font-weight: bold;
+}
+
+.alert-close {
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 

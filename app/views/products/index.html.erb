@@ -5,19 +5,18 @@
         <div class="product-item">
           <h2 class="product-name"><%= product.name %></h2>
           <p class="product-price">Price: <%= number_to_currency(product.price) %></p>
-          <%# <div data-controller="cart" class="cart-form"> %>
           <%= form_with(url: add_to_cart_product_path(product), method: :post, data: { turbo_frame: 'cart_frame', controller: 'cart' }, class: "add-to-cart-form") do |f| %>
             <%= f.hidden_field :product_id, value: product.id %>
             <div class="quantity-control">
               <div class="quantity-buttons">
-                <% product_quantity = @cart.cart_items[product.id.to_s] %>
+                <% product_quantity = @cart.cart_items[product.id.to_s].present? ? @cart.cart_items[product.id.to_s][:quantity] : 0 %>
                 <%= f.button "-", type: "submit", data: { action: "cart#decrement", cart_target: "decrementButton" }, class: "quantity-btn" %>
-                <%= f.text_field :quantity, value: product_quantity || 0,  min: 0, class: "quantity-input", data: { cart_target: "input" } %>
+                <%= f.text_field :quantity, value: product_quantity,  min: 0, class: "quantity-input", data: { cart_target: "input" } %>
                 <%= f.button "+", type: "submit", data: { action: "cart#increment", cart_target: "incrementButton" }, class: "quantity-btn" %>
               </div>
             </div>
           <% end %>
-          <%# </div> %>
+          <p class="promotion-description"><%= product.pricing_rules.first.description if product.pricing_rules.any? %></p>
         </div>
       <% end %>
     </div>

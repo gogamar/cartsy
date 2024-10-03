@@ -4,16 +4,15 @@ class Order < ApplicationRecord
   validates :total_price, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :confirmed?
 
   def add_items(cart)
-    cart.cart_items.each do |product_id, quantity|
-
-      product = Product.find(product_id.to_i)
-
+    cart.cart_items.each do |product_id, item_data|
       OrderItem.create(
-        price_per_item: product.price,
-        quantity: quantity,
-        total_price: product.price * quantity,
-        product_id: product.id,
-        order_id: id,
+        price_per_item: item_data[:price_per_item],
+        price_with_discount: item_data[:price_with_discount],
+        quantity: item_data[:quantity],
+        discount_amount: item_data[:discount_amount],
+        total_price: item_data[:total_price],
+        product_id: product_id,
+        order_id: id
       )
     end
   end
@@ -26,5 +25,4 @@ class Order < ApplicationRecord
   def calculate_total_price
     order_items.sum(&:total_price)
   end
-
 end
