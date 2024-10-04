@@ -1,27 +1,13 @@
-<div class="container">
-  <div class="left-content">
-    <div class="product-list">
-      <% @products.each do |product| %>
-        <div class="product-item">
-          <h2 class="product-name"><%= product.name %></h2>
-          <p class="product-price">Price: <%= number_to_currency(product.price) %></p>
-          <%= form_with(url: add_to_cart_product_path(product), method: :post, data: { turbo_frame: 'cart_frame', controller: 'cart' }, class: "add-to-cart-form") do |f| %>
-            <%= f.hidden_field :product_id, value: product.id %>
-            <div class="quantity-control">
-              <div class="quantity-buttons">
-                <% product_quantity = @cart.cart_items[product.id.to_s].present? ? @cart.cart_items[product.id.to_s][:quantity] : 0 %>
-                <%= f.button "-", type: "submit", data: { action: "cart#decrement", cart_target: "decrementButton" }, class: "quantity-btn" %>
-                <%= f.text_field :quantity, value: product_quantity,  min: 0, class: "quantity-input", data: { cart_target: "input" } %>
-                <%= f.button "+", type: "submit", data: { action: "cart#increment", cart_target: "incrementButton" }, class: "quantity-btn" %>
-              </div>
-            </div>
-          <% end %>
-          <p class="promotion-description"><%= product.pricing_rules.first.description if product.pricing_rules.any? %></p>
-        </div>
-      <% end %>
+<div class="row">
+  <div class="col-lg-7">
+    <div class="card border shadow-0">
+      <div class="m-4">
+        <h4 class="card-title mb-3">Daily Promotions</h4>
+        <% @products.each do |product| %>
+          <%= render "product", product: product %>
+        <% end %>
+      </div>
     </div>
   </div>
-  <div class="right-content">
-    <%= render partial: 'cart', locals: { cart: @cart, products: @products } %>
-  </div>
+  <%= render partial: 'cart', locals: { cart: @cart, products: @products } %>
 </div>
