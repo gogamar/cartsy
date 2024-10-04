@@ -3,6 +3,7 @@
 ## Overview
 
 Cartsy is a simple cash register application built with Ruby on Rails. It calculates the total price of items added to a cart, applying specific pricing rules. Cartsy includes a standalone ruby.rb script that can be executed from the command line for testing or standalone usage.
+<br>
 Demo: https://cartsy-cart-2ca27002eb03.herokuapp.com/products
 
 ## Ruby Version
@@ -37,10 +38,12 @@ Then execute `bundle exec rspec`
 
 ### Data Model
 
+```
 Product --< OrderItem >-- Order
 |
 v
 PricingRule
+```
 
 ### Key Components
 
@@ -48,7 +51,7 @@ PricingRule
 - **PricingRule**: Defines special pricing or discount rules for products.
 - **Order**: Represents a purchase. Can have status pending or confirmed.
 - **OrderItem**: Represents individual items within an order.
-- **CartService**: A service class located in app/services/cart_service.rb that handles the business logic for cart management. It holds the items added during the session, applies pricing rules and calculates totals, without storing any data in the database.
+- **CartService**: A service class located in `app/services/cart_service.rb` that handles the business logic for cart management. It holds the items added during the session, applies pricing rules and calculates totals, without storing any data in the database.
 
 ## Design Decisions
 
