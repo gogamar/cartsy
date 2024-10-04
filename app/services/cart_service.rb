@@ -95,7 +95,8 @@ class CartService
     if rule.discount_amount.present?
       rule.discount_amount * quantity
     elsif rule.discount_percentage.present?
-      price_per_item * (rule.discount_percentage / 100) * quantity
+      discount_perc_2_decimals = (rule.discount_percentage / 100).round(2)
+      (price_per_item * discount_perc_2_decimals).round(2) * quantity
     elsif rule.free_items.present?
       price_per_item * rule.free_items * quantity
     else
