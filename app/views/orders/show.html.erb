@@ -4,7 +4,7 @@
   </h1>
   <p class="order-status <%= "text-success fw-bold" if @order.status == "Confirmed" %>">Order Status: <%= @order.status %></p>
   <div class="order-items list-group mb-4">
-    <% @order.order_items.each do |item| %>
+    <% @sorted_order_items.each do |item| %>
       <% product = Product.find(item.product_id) %>
       <div class="order-item list-group-item">
         <div class="row">
@@ -49,7 +49,7 @@
       <% unless @order.status == "Confirmed" %>
         <%= form_with(model: @order, local: true, class: "d-inline") do |form| %>
           <%= form.hidden_field :status, value: "Confirmed" %>
-          <%= form.button "Confirm Order", type: "submit", class: "btn btn-success" %>
+          <%= form.button "Confirm Order", type: "submit", class: "btn btn-primary" %>
         <% end %>
       <% end %>
     </div>

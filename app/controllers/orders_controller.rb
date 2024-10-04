@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
   def show
     @order = Order.find(params[:id])
+    @sorted_order_items = @order.order_items.order(total_price: :desc)
   end
 
   def create
