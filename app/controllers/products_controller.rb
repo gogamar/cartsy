@@ -3,7 +3,7 @@ class ProductsController < ApplicationController
     @products = Product.all
     @sorted_cart_items = @cart.cart_items.sort_by do |key, details|
       # Criteria: move items with '_free' in the key or total_price == 0 to the end
-      [key.include?('_free') ? 1 : 0, key]
+      [ key.include?("_free") ? 1 : 0, key ]
     end.to_h
   end
 
