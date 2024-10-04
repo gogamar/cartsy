@@ -12,12 +12,12 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to products_path }
-      format.js { render partial: 'products/cart', locals: { cart: @cart, products: @products } }
+      format.js { render partial: "products/cart", locals: { cart: @cart, products: @products } }
     end
   end
 
   def checkout
-    @order = Order.create(status: 'Pending')
+    @order = Order.create(status: "Pending")
     @order.add_items(@cart)
     @order.total_price = @order.calculate_total_price
     @order.total_discount = @order.calculate_total_discount
@@ -25,7 +25,7 @@ class ProductsController < ApplicationController
     if @order.save
       redirect_to order_path(@order)
     else
-      redirect_to products_path, alert: 'Failed to create order.'
+      redirect_to products_path, alert: "Failed to create order."
     end
   end
 end

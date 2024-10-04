@@ -109,13 +109,13 @@ class CartCLI
     )
 
     @cart_service.cart_items.each do |product_id, item_data|
-      if product_id.to_s.include?('free')
-        cleaned_product_id = product_id.to_s.gsub('_free', '').to_s
+      if product_id.to_s.include?("free")
+        cleaned_product_id = product_id.to_s.gsub("_free", "").to_s
       else
         cleaned_product_id = product_id.to_s
       end
 
-      product = Product.find_by(id: cleaned_product_id )
+      product = Product.find_by(id: cleaned_product_id)
 
       OrderItem.create!(
         order: order,
