@@ -1,65 +1,45 @@
-<div class="cart-summary">
-  <%= turbo_frame_tag "cart_frame" do %>
-    <% if cart.cart_items.any? %>
-      <ul class="cart-items">
-        <% cart.cart_items.each do |product_id, item_data| %>
-          <% product = Product.find_by(id: product_id) %>
-          <% if product %>
-            <li class="cart-item">
-              <span class="item-name"><%= product.name %></span>
-              <span class="item-price <%= "strikethrough" if item_data[:price_with_discount] %>"><%= number_to_currency(item_data[:price_per_item].to_f) %></span>
-              <span class="item-price green">
-                <% if item_data[:price_with_discount] %>
-                  <%= number_to_currency(item_data[:price_with_discount].to_f) %>
+<div class="col-lg-5">
+  <div class="card shadow-0 border">
+    <div class="card-body">
+      <%= turbo_frame_tag "cart_frame" do %>
+        <% if cart.cart_items.any? %>
+          <% cart.cart_items.each do |product_id, item_data| %>
+            <% product = Product.find_by(id: product_id) %>
+            <% if product %>
+              <div class="mb-4 cart-item-js">
+                <div class="row d-flex justify-content-between align-items-center">
+                  <span class="col-lg-4 fw-bold"><%= product.name %></span>
+                  <span class="col-lg-2 text-muted">x <%= item_data[:quantity] %></span>
+                  <span class="col-lg-2 text-success">
+                    <% if item_data[:price_with_discount] %>
+                      <%= number_to_currency(item_data[:price_with_discount].to_f) %>
+                    <% end %>
+                  </span>
+                  <span class="col-lg-2 <%= "text-decoration-line-through text-danger" if item_data[:price_with_discount] %>">
+                    <%= number_to_currency(item_data[:price_per_item].to_f) %>
+                  </span>
+                </div>
+                <% if item_data[:discount_description] %>
+                  <p class="mb-2 fw-lighter fst-italic text-muted mt-1"><%= item_data[:discount_description] %></p>
                 <% end %>
-              </span>
-              <span class="item-quantity">x <%= item_data[:quantity] %></span>
-              <span class="item-total-price"><%= number_to_currency(item_data[:total_price].to_f) %></span>
-            </li>
-            <% if item_data[:discount_description] %>
-              <span class="item-description"><%= item_data[:discount_description] %></span>
+              </div>
             <% end %>
           <% end %>
+          <div class="d-flex justify-content-between border-top pt-4">
+            <p class="mb-2">Total Price:</p>
+            <h4 class="mb-2"><%= number_to_currency(cart.cart_total_price) %></h4>
+          </div>
+          <div id="checkout-container-js" class="mt-4 border-top">
+            <div>
+              <%= button_to "Checkout", checkout_path, method: :post, class: "btn btn-success w-100 shadow-0 mb-2", data: { turbo: false } %>
+            </div>
+          </div>
+        <% else %>
+          <div class="d-flex justify-content-center">
+            <p class="mb-2 text-danger fw-bold">Your cart is empty.</p>
+          </div>
         <% end %>
-      </ul>
-      <p class="cart-total">
-        <strong>Total Price:</strong> <%= number_to_currency(cart.cart_total_price) %>
-      </p>
-    <% else %>
-      <p class="alert alert-info">
-        <strong>Your cart is empty.</strong>
-      </p>
-    <% end %>
-  <% end %>
-  <% if cart.cart_items.any? %>
-    <div id="checkout-container">
-      <div>
-        <%= button_to "Checkout", checkout_path, method: :post, class: "checkout-btn" %>
-      </div>
+      <% end %>
     </div>
-  <% end %>
+  </div>
 </div>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const checkoutContainer = document.getElementById("checkout-container");
-
-    function updateCheckoutVisibility() {
-      const cartItems = document.querySelectorAll(".cart-item");
-      if (cartItems.length === 0) {
-        checkoutContainer.style.display = "none";
-      } else {
-        checkoutContainer.style.display = "block";
-      }
-    }
-
-    // Initially check visibility on page load
-    updateCheckoutVisibility();
-
-    // Event listener for incrementing/decrementing items in the cart
-    document.querySelectorAll('.add-to-cart-form').forEach(form => {
-      form.addEventListener("submit", function() {
-        updateCheckoutVisibility();
-      });
-    });
-  });
-</script>

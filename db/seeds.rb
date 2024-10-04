@@ -3,9 +3,9 @@ Product.destroy_all
 PricingRule.destroy_all
 
 products = [
-  { code: "GR1", name: "Green Tea", price: 3.11 },
-  { code: "SR1", name: "Strawberries", price: 5.00 },
-  { code: "CF1", name: "Coffee", price: 11.23 }
+  { code: "GR1", name: "Green Tea", price: 3.11, image_url: "https://images.unsplash.com/photo-1606377695906-236fdfcef767?q=80&w=220"},
+  { code: "SR1", name: "Strawberries", price: 5.00, image_url: "https://images.unsplash.com/photo-1503624280608-6b79dc9ab03d?q=80&w=220" },
+  { code: "CF1", name: "Coffee", price: 11.23, image_url: "https://plus.unsplash.com/premium_photo-1673545518947-ddf3240090b1?q=80&w=220" }
 ]
 
 products.each do |product_data|

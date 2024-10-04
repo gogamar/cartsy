@@ -12,7 +12,7 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
     if @order.update(order_params)
       @cart.clear
-      redirect_to order_path(@order), notice: "Order has been confirmed."
+      redirect_to order_path(@order), notice: "Your order has been confirmed."
     else
       flash[:alert] = "There was an issue confirming your order. Please try again."
       redirect_to order_path(@order)

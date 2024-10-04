@@ -1,33 +1,57 @@
-<div class="order-confirmation">
-  <h1 class="order-title">
+<div class="order-confirmation container">
+  <h1 class="order-title mb-4">
     <%= @order.status == "Pending" ? "Please review your order" : "Thank you for your order" %>
   </h1>
-  <p class="order-status <%= "confirmed" if @order.status == "Confirmed" %>">Order Status: <%= @order.status %></p>
-  <div class="order-items">
+  <p class="order-status <%= "text-success fw-bold" if @order.status == "Confirmed" %>">Order Status: <%= @order.status %></p>
+  <div class="order-items list-group mb-4">
     <% @order.order_items.each do |item| %>
       <% product = Product.find(item.product_id) %>
-      <div class="order-item">
-        <div class="order-item-details">
-          <span class="product-name"><%= product.name %></span>
-          <span class="price-per-item <%= "strikethrough" if item.price_with_discount %>"><%= number_to_currency(item.price_per_item) %></span>
-          <span class="price-per-item <%= "green" if item.price_with_discount %>"><%= number_to_currency(item.price_with_discount) %></span>
-          <span class="quantity">Quantity: <%= item.quantity %></span>
-          <span class="total-price"><%= number_to_currency(item.total_price) %></span>
+      <div class="order-item list-group-item">
+        <div class="row">
+          <div class="col-md-6 d-flex justify-content-center justify-content-md-start align-items-center">
+            <span class="product-name fw-bold"><%= product.name %></span>
+          </div>
+          <div class="col-md-6">
+            <div class="row text-center">
+              <div class="col-md-3">
+                <span class="price-per-item <%= "text-decoration-line-through" if item.price_with_discount %>">
+                  <%= number_to_currency(item.price_per_item) %>
+                </span>
+              </div>
+              <div class="col-md-3">
+                <% if item.price_with_discount %>
+                  <span class="price-per-item text-success">
+                    <%= number_to_currency(item.price_with_discount) %>
+                  </span>
+                <% end %>
+              </div>
+              <div class="col-md-3">
+                <span class="quantity text-muted">x <%= item.quantity %></span>
+              </div>
+              <div class="col-md-3">
+                <span class="total-price fw-bold"><%= number_to_currency(item.total_price) %></span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     <% end %>
   </div>
-  <p class="alert alert-success order-status">You have just saved <%= number_to_currency(@order.total_discount) %></p>
-  <p class="order-total">Total Price: <%= number_to_currency(@order.total_price) %></p>
-  <div class="order-actions">
-    <%= link_to "#{@order.status == 'Confirmed' ? 'Shop Again' : 'Back to Products'}", products_path, class: "btn back-btn" %>
-    <% unless @order.status == "Confirmed" %>
-      <%= form_with(model: @order, local: true, class: "order-confirmation-form") do |form| %>
-        <%= form.hidden_field :status, value: "Confirmed" %>
-        <div class="form-actions">
-          <%= form.button "Confirm Order", type: "submit", class: "btn confirm-btn" %>
-        </div>
+  <% if @order.total_discount > 0 %>
+    <p class="alert alert-success">You have just saved <%= number_to_currency(@order.total_discount) %>!!!</p>
+  <% end %>
+  <div class="d-flex justify-content-between align-items-end">
+    <div>
+      <%= link_to "#{@order.status == 'Confirmed' ? 'Shop Again' : 'Back to Products'}", products_path, class: "btn btn-secondary me-2" %>
+    </div>
+    <div class="d-flex flex-column align-items-end">
+      <p class="order-total fw-bold fs-5">Total Price: <%= number_to_currency(@order.total_price) %></p>
+      <% unless @order.status == "Confirmed" %>
+        <%= form_with(model: @order, local: true, class: "d-inline") do |form| %>
+          <%= form.hidden_field :status, value: "Confirmed" %>
+          <%= form.button "Confirm Order", type: "submit", class: "btn btn-primary" %>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 </div>
