@@ -4,10 +4,9 @@ class Order < ApplicationRecord
   validates :total_price, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :confirmed?
 
   def add_items(cart)
-    puts "these are the cart.cart_items...#{cart.cart_items}"
     cart.cart_items.each do |product_id, item_data|
-      if product_id.to_s.include?('free')
-        product_id = product_id.to_s.gsub('_free', '').to_i
+      if product_id.to_s.include?("free")
+        product_id = product_id.to_s.gsub("_free", "").to_i
       end
       OrderItem.create(
         price_per_item: item_data[:price_per_item],
@@ -22,7 +21,7 @@ class Order < ApplicationRecord
   end
 
   def confirmed?
-    status == 'Confirmed'
+    status == "Confirmed"
   end
 
   # Method to calculate total price based on associated order items

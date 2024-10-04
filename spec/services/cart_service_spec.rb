@@ -123,7 +123,7 @@ RSpec.describe CartService do
 
     it 'calculates total discount of all items in cart' do
       service.add_product(product1.id, 1)
-      service.add_product(product2.id, 2)             # Debug output
+      service.add_product(product2.id, 2)
 
       expected_total = service.cart_items.values.sum { |item| item[:total_discount].to_f }
       expect(service.cart_total_discount).to eq(expected_total)
