@@ -2,10 +2,7 @@
   <div class="col-lg-7">
     <div class="card border shadow-0">
       <div class="m-4">
-        <div class="mb-5">
-          <h4 class="card-title">Daily Promotions</h4>
-          <p class="text-muted">To add products to the shopping cart, select the quantity and click "Add".</p>
-        </div>
+        <h4 class="card-title mb-3">Daily Promotions</h4>
         <% @products.each do |product| %>
           <%= render "product", product: product %>
         <% end %>

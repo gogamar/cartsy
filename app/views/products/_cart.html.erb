@@ -6,18 +6,26 @@
           <% cart.cart_items.each do |product_id, item_data| %>
             <% product = Product.find_by(id: product_id) %>
             <% if product %>
-              <div class="mb-4 cart-item-js">
+              <div class="mb-4 cart-item-js border-bottom">
                 <div class="row d-flex justify-content-between align-items-center">
-                  <span class="col-lg-4 fw-bold"><%= product.name %></span>
-                  <span class="col-lg-2 text-muted">x <%= item_data[:quantity] %></span>
-                  <span class="col-lg-2 text-success">
+                  <span class="col-md-4 col-12 fw-bold"><%= product.name %></span>
+                  <span class="col-md-2 col-3 text-muted">x <%= item_data[:quantity] %></span>
+                  <span class="col-md-2 col-3 text-success">
                     <% if item_data[:price_with_discount] %>
                       <%= number_to_currency(item_data[:price_with_discount].to_f) %>
                     <% end %>
                   </span>
-                  <span class="col-lg-2 <%= "text-decoration-line-through text-danger" if item_data[:price_with_discount] %>">
+                  <span class="col-md-2 col-3 <%= "text-decoration-line-through text-danger" if item_data[:price_with_discount] %>">
                     <%= number_to_currency(item_data[:price_per_item].to_f) %>
                   </span>
+                  <!-- Remove Button -->
+                  <div class="col-md-2 col-3 text-end">
+                    <%= form_with(url: add_to_cart_product_path(product), method: :post, data: { turbo_frame: 'cart_frame' }, class: "form-inline") do |f| %>
+                      <%= f.hidden_field :product_id, value: product.id %>
+                      <%= f.hidden_field :quantity, value: 0 %>
+                      <%= f.submit "x", class: "remove-x text-danger" %>
+                    <% end %>
+                  </div>
                 </div>
                 <% if item_data[:discount_description] %>
                   <p class="mb-2 fw-lighter fst-italic text-muted mt-1"><%= item_data[:discount_description] %></p>
@@ -25,7 +33,7 @@
               </div>
             <% end %>
           <% end %>
-          <div class="d-flex justify-content-between border-top pt-4">
+          <div class="d-flex justify-content-between pt-4">
             <p class="mb-2">Total Price:</p>
             <h4 class="mb-2"><%= number_to_currency(cart.cart_total_price) %></h4>
           </div>

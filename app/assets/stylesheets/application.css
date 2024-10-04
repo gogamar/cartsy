@@ -13,6 +13,10 @@
  *= require_tree .
  *= require_self
  */
+.remove-x {
+  background: none;
+  border: none;
+}
 
 @media (min-width: 1025px) {
   .h-custom {

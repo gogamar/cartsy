@@ -49,7 +49,7 @@
       <% unless @order.status == "Confirmed" %>
         <%= form_with(model: @order, local: true, class: "d-inline") do |form| %>
           <%= form.hidden_field :status, value: "Confirmed" %>
-          <%= form.button "Confirm Order", type: "submit", class: "btn btn-primary" %>
+          <%= form.button "Confirm Order", type: "submit", class: "btn btn-success" %>
         <% end %>
       <% end %>
     </div>
