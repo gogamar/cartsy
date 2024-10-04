@@ -2,24 +2,30 @@
   <div class="card shadow-0 border">
     <div class="card-body">
       <%= turbo_frame_tag "cart_frame" do %>
-        <% if cart.cart_items.any? %>
-          <% cart.cart_items.each do |product_id, item_data| %>
+        <% if @sorted_cart_items.any? %>
+          <% @sorted_cart_items.each do |product_id, item_data| %>
             <% product = Product.find_by(id: product_id) %>
             <% if product %>
               <div class="mb-4 cart-item-js border-bottom">
                 <div class="row d-flex justify-content-between align-items-center">
                   <span class="col-md-4 col-12 fw-bold"><%= product.name %></span>
                   <span class="col-md-2 col-3 text-muted">x <%= item_data[:quantity] %></span>
-                  <span class="col-md-2 col-3 text-success">
+                  <span class="col-md-4 col-8 text-success d-flex justify-content-end">
+                    <% if item_data[:price_with_discount] %>
+                      <span class="text-decoration-line-through text-danger me-3">
+                        <%= number_to_currency(item_data[:price_per_item].to_f) %>
+                      </span>
+                    <% else %>
+                      <span class="">
+                        <%= number_to_currency(item_data[:price_per_item].to_f) %>
+                      </span>
+                    <% end %>
                     <% if item_data[:price_with_discount] %>
                       <%= number_to_currency(item_data[:price_with_discount].to_f) %>
                     <% end %>
                   </span>
-                  <span class="col-md-2 col-3 <%= "text-decoration-line-through text-danger" if item_data[:price_with_discount] %>">
-                    <%= number_to_currency(item_data[:price_per_item].to_f) %>
-                  </span>
                   <!-- Remove Button -->
-                  <div class="col-md-2 col-3 text-end">
+                  <div class="col-md-1 col-1 text-end">
                     <%= form_with(url: add_to_cart_product_path(product), method: :post, data: { turbo_frame: 'cart_frame' }, class: "form-inline") do |f| %>
                       <%= f.hidden_field :product_id, value: product.id %>
                       <%= f.hidden_field :quantity, value: 0 %>
@@ -28,13 +34,13 @@
                   </div>
                 </div>
                 <% if item_data[:discount_description] %>
-                  <p class="mb-2 fw-lighter fst-italic text-muted mt-1"><%= item_data[:discount_description] %></p>
+                  <p class="mb-2 fw-lighter fst-italic mt-1 <%= item_data[:total_price] == 0 ? 'text-success' : 'text-muted' %>"><%= item_data[:discount_description] %></p>
                 <% end %>
               </div>
             <% end %>
           <% end %>
-          <div class="d-flex justify-content-between pt-4">
-            <p class="mb-2">Total Price:</p>
+          <div class="d-flex justify-content-end pt-4 me-4">
+            <p class="mb-2 me-3">Total Price:</p>
             <h4 class="mb-2"><%= number_to_currency(cart.cart_total_price) %></h4>
           </div>
           <div id="checkout-container-js" class="mt-4 border-top">
