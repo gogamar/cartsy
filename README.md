@@ -4,7 +4,7 @@
 
 Cartsy is a simple cash register application built with Ruby on Rails. It calculates the total price of items added to a cart, applying specific pricing rules. Cartsy includes a standalone ruby.rb script that can be executed from the command line for testing or standalone usage.
 <br>
-Demo: https://cartsy-cart-2ca27002eb03.herokuapp.com/products
+
 
 ## Ruby Version
 
